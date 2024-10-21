@@ -1,12 +1,9 @@
 #include "Input.h"
 #include "cassert"
-#include <wrl.h>
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
+
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
-using namespace Microsoft::WRL;
 
 void Input::Initialize(HINSTANCE hInstance, HWND hwnd) {
 	// DirectInputのインスタンス生成
@@ -22,4 +19,12 @@ void Input::Initialize(HINSTANCE hInstance, HWND hwnd) {
 	// 排他的制御レベルのセット
 	hr = keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
+}
+
+void Input::Update() {
+	// キーボード情報
+	keyboard->Acquire();
+	// 全キーの入力情報を取得する
+	BYTE key[256] = {};
+	keyboard->GetDeviceState(sizeof(key), key);
 }
