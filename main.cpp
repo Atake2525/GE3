@@ -1140,6 +1140,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::PopStyleColor();
 			ImGui::PopStyleColor();
 
+			if (input->TriggerKey(DIK_0)) {
+				OutputDebugStringA("Hit 0\n");
+				transform.rotate.x++;
+			}
+
 			// 開発用UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える
 			//ImGui::ShowDemoWindow();
 
