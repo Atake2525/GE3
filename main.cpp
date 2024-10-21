@@ -13,6 +13,7 @@
 #include "Vector4.h"
 #include "Matrix4x4.h"
 #include "kMath.h"
+#include "Input.h"
 #include "externels/imgui/imgui.h"
 #include "externels/imgui/imgui_impl_dx12.h"
 #include "externels/imgui/imgui_impl_win32.h"
@@ -491,6 +492,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #endif // DEBUG
 
+	// ポインタ
+	Input* input = nullptr;
+
+	// 入力の初期化
+	input = new Input();
+	input->Initialize(wc.hInstance, hwnd);
 
 	//出ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
@@ -1311,7 +1318,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	debugController->Release();
 #endif // DEBUG
 	CloseWindow(hwnd);
-
+	delete input;
 
 	//リソースリークチェック
 	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
