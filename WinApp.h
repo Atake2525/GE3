@@ -18,6 +18,9 @@ public:
 	/// </summary>
 	void Update();
 
+	// 終了
+	void Finalize();
+
 	// クライアント領域サイズ
 	static const int32_t kClientWidth = 1280;
 	static const int32_t kClientHeight = 720;

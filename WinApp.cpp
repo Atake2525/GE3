@@ -23,7 +23,7 @@ LRESULT CALLBACK WinApp::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 void WinApp::Initialize() {
 
 	// ウィンドウプロージャ
-	wc.lpfnWndProc = WindwsProc;
+	wc.lpfnWndProc = windowProc;
 	// ウィンドウのクラス名
 	wc.lpszClassName = L"CGWindowClass";
 	// インスタントハンドル
@@ -50,4 +50,10 @@ void WinApp::Initialize() {
 
 void WinApp::Update() {
 
+}
+
+// 終了
+void WinApp::Finalize() { 
+	CloseWindow(hwnd);
+	CoUninitialize();
 }

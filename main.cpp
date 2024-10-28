@@ -465,7 +465,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// 入力の初期化
 	input = new Input();
-	input->Initialize(winApp->GetHInstance(), winApp->GetHwnd());
+	input->Initialize(winApp);
 
 	//出ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
@@ -474,7 +474,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//IDXGIFactory7* dxgiFactory = nullptr;
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
 	//HRESULTはWindows系のエラーコードであり関数が成功したかどうかをSUCCEEDEDマクロで判定できる
-	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
+	hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
 	//初期化の根本的な部分でエラーが出た場合はプログラムが間違っているかどうか、どうにもできない場合が多いのでassertにしておく
 	assert(SUCCEEDED(hr));
 
@@ -1292,10 +1292,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #ifdef DEBUG
 	debugController->Release();
 #endif // DEBUG
-	CloseWindow(winApp->GetHwnd());
+	// 入力解放
 	delete input;
+	// WindowAPIの終了処理
+	winApp->Finalize();
+	// WindowAPI解放
 	delete winApp;
-
 	//リソースリークチェック
 	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
 	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
@@ -1307,7 +1309,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	{
 
 	}
-	CoUninitialize();
 	return 0;
 }
 
