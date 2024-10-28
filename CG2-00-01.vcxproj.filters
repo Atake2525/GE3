@@ -16,6 +16,15 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{46a21120-8903-447e-860e-60fa2814fc68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{3d770bf4-5e61-4cd8-ad6b-d96ec06451c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{840aecbc-c076-4a2f-8121-54497d2c8444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinApp">
+      <UniqueIdentifier>{9723b77c-1e45-47c5-bdde-a8ed59cbdce5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,17 +51,17 @@
     <ClCompile Include="externels\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="kMath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="kMath.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="WinApp.cpp">
+      <Filter>WinApp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vector4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="externels\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -77,23 +86,29 @@
     <ClInclude Include="externels\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Input.h">
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="kMath.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Matrix3x3.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="WinApp.h">
+      <Filter>WinApp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
