@@ -21,6 +21,9 @@ public:
 	// 終了
 	void Finalize();
 
+	// メッセージの処理
+	bool ProcessMessage();
+
 	// クライアント領域サイズ
 	static const int32_t kClientWidth = 1280;
 	static const int32_t kClientHeight = 720;
