@@ -46,6 +46,8 @@ void WinApp::Initialize() {
 
 	// ウィンドウを表示する
 	ShowWindow(hwnd, SW_SHOW);
+
+	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 }
 
 void WinApp::Update() {
