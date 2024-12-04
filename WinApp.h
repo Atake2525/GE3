@@ -32,11 +32,12 @@ public:
 	HWND GetHwnd() const { return hwnd; }
 	HINSTANCE GetHInstance() const { return wc.hInstance; }
 
+	
+
 private:
 	// ウィンドウハンドル
 	HWND hwnd = nullptr;
 
 	// ウィンドウクラスの設定
 	WNDCLASS wc{};
-
 };
