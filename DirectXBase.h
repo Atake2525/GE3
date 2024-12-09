@@ -5,6 +5,9 @@
 #include <d3d12.h>
 #include <array>
 #include <dxcapi.h>
+#include <string>
+#include <cstdint>
+#include "externels/DirectXTex/DirectXTex.h"
 
 
 class DirectXBase {
@@ -12,15 +15,24 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(WinApp* winApp);
+
+	// 描画前処理
+	void PreDraw();
+
+	// 描画後処理
+	void PostDraw();
+
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得する
 	/// </summary>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVCPUDescriptorHandle(uint32_t index);
+	
 	/// <summary>
 	/// SRVの指定番号のGPUデスクリプタハンドル
 	/// </summary>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle(uint32_t index);
+	
 	// DSVとRTVも作る
 
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, 2> swapChainResources;
@@ -28,12 +40,6 @@ public:
 	// getter
 	Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const { return device.Get(); }
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCommandList() const { return commandList.Get(); }
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue> GetCommandQueue() const { return commandQueue.Get(); }
-	// コマンドアロケータ
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> GetCommandAllocator() const { return commandAllocator.Get(); }
-
-	// スワップチェイン
-	Microsoft::WRL::ComPtr<IDXGISwapChain4> GetSwapChain() const { return swapChain; }
 	// SwapChainからResourceを引っ張ってくる
 	//Microsoft::WRL::ComPtr<ID3D12Resource> GetSwapChainResources(UINT i) const { return swapChainResources[i].Get(); };
 
@@ -42,11 +48,24 @@ public:
 	/// </summary>
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 
+	// シェーダーのコンパイル
+	Microsoft::WRL::ComPtr<IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, size_t sizeInBytes);
+
+	// DirectX12のTextureResourceを作る
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata);
+
+	void UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
+
+	// Textureデータを読む
+	DirectX::ScratchImage LoadTexture(const std::string& filePath);
 private:
 	// DirectX12デバイス
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
-	// シェーダーのコンパイル
-	Microsoft::WRL::ComPtr<IDxcBlob> ComplieShader(const std::wstring& filePath, const wchar_t* profile);
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height);
+
 	/// <summary>
 	/// デバイス初期化
 	/// </summary>
@@ -124,16 +143,28 @@ private:
 	// ビューポート矩形
 	D3D12_VIEWPORT viewPort{};
 	// シザー矩形
-	D3D12_RECT scissor{};
+	D3D12_RECT scissorRect{};
 	// フェンス
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence = nullptr;
+	uint64_t fenceValue;
+	HANDLE fenceEvent;
 	// スワップチェイン
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 	// SwapChainからResourceを引っ張ってくる
 	//Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources = nullptr;
+	
+	// バックバッファの番号
+	UINT backBufferIndex;
+	// リソースバリア
+	D3D12_RESOURCE_BARRIER barrier{};
+	// dsvHandle
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;
+	
 	// RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
 
 	// RTV様のヒープでディスクリプタの数は2。RTVはShader内で触るものではないので、ShaderVisibleはfalse
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap;
