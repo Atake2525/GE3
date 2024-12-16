@@ -7,6 +7,8 @@
 #include <dxcapi.h>
 #include <string>
 #include <cstdint>
+#include <chrono>
+#include <thread>
 #include "externels/DirectXTex/DirectXTex.h"
 
 
@@ -70,6 +72,14 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height);
+
+	// FPS固定初期化
+	void InitializeFixFPS();
+	// FPS固定更新
+	void UpdateFixFPS();
+
+	// 起動時間(FPS固定用)
+	std::chrono::steady_clock::time_point reference_;
 
 	/// <summary>
 	/// デバイス初期化

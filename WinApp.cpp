@@ -22,6 +22,9 @@ LRESULT CALLBACK WinApp::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
 void WinApp::Initialize() {
 
+	// システムタイマーの分解能を上げる
+	timeBeginPeriod(1);
+
 	// ウィンドウプロージャ
 	wc.lpfnWndProc = windowProc;
 	// ウィンドウのクラス名
