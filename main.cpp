@@ -458,20 +458,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directxBase->Initialize(winApp);
 
 
+#ifdef _DEBUG
+	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))));
+	{
+		//デバッグレイヤーを有効化する
+		debugController->EnableDebugLayer();
+		//さらにGPU側でもチェックを行うようにする
+		debugController->SetEnableGPUBasedValidation(TRUE);
+	}
 
-//#ifdef _DEBUG
-//	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController = nullptr;
-//	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))));
-//	{
-//		//デバッグレイヤーを有効化する
-//		debugController->EnableDebugLayer();
-//		//さらにGPU側でもチェックを行うようにする
-//		debugController->SetEnableGPUBasedValidation(TRUE);
-//	}
-//
-//#endif // DEBUG
-
-	// ポインタ
+  // ポインタ
 	Input* input = nullptr;
 
 	// 入力の初期化
@@ -480,14 +477,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//出ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
-
-	////DXGIファクトリーの作成
-	////IDXGIFactory7* dxgiFactory = nullptr;
-	//Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
-	////HRESULTはWindows系のエラーコードであり関数が成功したかどうかをSUCCEEDEDマクロで判定できる
-	//hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
-	////初期化の根本的な部分でエラーが出た場合はプログラムが間違っているかどうか、どうにもできない場合が多いのでassertにしておく
-	//assert(SUCCEEDED(hr));
 
 	//使用するアダプタ用の変数、最初、nullptrを入れておく
 	//Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter = nullptr;
