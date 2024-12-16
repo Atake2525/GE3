@@ -23,6 +23,9 @@ public:
 	// 描画後処理
 	void PostDraw();
 
+	// 終了処理
+	void Finalize();
+
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得する
 	/// </summary>
@@ -36,6 +39,8 @@ public:
 	// DSVとRTVも作る
 
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, 2> swapChainResources;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource;
 
 	// getter
 	Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const { return device.Get(); }
@@ -146,7 +151,7 @@ private:
 	D3D12_RECT scissorRect{};
 	// フェンス
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence = nullptr;
-	uint64_t fenceValue;
+	uint64_t fenceValue = 0;
 	HANDLE fenceEvent;
 	// スワップチェイン
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain = nullptr;
@@ -165,6 +170,8 @@ private:
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
+
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 
 	// RTV様のヒープでディスクリプタの数は2。RTVはShader内で触るものではないので、ShaderVisibleはfalse
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap;

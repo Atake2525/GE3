@@ -1287,6 +1287,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #endif // DEBUG
 	// 入力解放
 	delete input;
+	// directXBaseの終了処理
+	directxBase->Finalize();
 	// WindowAPIの終了処理
 	winApp->Finalize();
 	// WindowAPI解放
