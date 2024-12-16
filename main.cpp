@@ -468,7 +468,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		debugController->SetEnableGPUBasedValidation(TRUE);
 	}
 
-  // ポインタ
+	#endif
+
+	// ポインタ
 	Input* input = nullptr;
 
 	// 入力の初期化
@@ -1296,7 +1298,3 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//}
 	return 0;
 }
-
-
-
-

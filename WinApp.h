@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <Windows.h>
 
-
+#pragma comment(lib, "winmm.lib")
 #pragma once
 
 class WinApp {
