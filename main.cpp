@@ -190,7 +190,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SpriteBase* spriteBase = nullptr;
 	// スプライト共通部の初期化
 	spriteBase = new SpriteBase;
-	spriteBase->Initialize();
+	spriteBase->Initialize(directxBase);
 
 #pragma endregion 基盤システムの初期化
 
@@ -679,8 +679,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//// これから書き込むバックバッファのインデックスを取得
 			//UINT backBufferIndex = directxBase->GetSwapChain()->GetCurrentBackBufferIndex();
 
-			// 描画前処理
+			// 描画前処理。DirextXの描画準備。全ての描画に共通のグラフィックスコマンドを積む
 			directxBase->PreDraw();
+
+			// Spriteの描画準備、Spriteの描画に共通のグラフィックスコマンドを積む
+			spriteBase->sharedDrawSet();
 			
 			// 入力の更新
 			input->Update();
