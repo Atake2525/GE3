@@ -697,10 +697,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//ゲームの処理
 			// Sprite用のWorldViewProjectionMatrixを作る
 			// SpriteのTransform処理
-			Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
+			/*Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
 			Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 			Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth), float(WinApp::kClientHeight), 0.0f, 100.0f);
-			Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));
+			Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));*/
 			//*tranformationMatrixDataSprite = worldViewProjectionMatrixSprite;
 
 			
@@ -762,17 +762,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #endif // DEBUG
 	// directXBaseの終了処理
 	directxBase->Finalize();
+	delete directxBase;
 	// WindowAPIの終了処理
 	winApp->Finalize();
 	// WindowAPI解放
 	delete winApp;
-	////リソースリークチェック
-	d3dResourceLeakChecker->~D3DResourceLeakChecker();
-	// 入力解放
-	delete input;
 	// スプライト解放
 	delete spriteBase;
 	delete sprite;
+	// 入力解放
+	delete input;
+	////リソースリークチェック
+	d3dResourceLeakChecker->~D3DResourceLeakChecker();
+	delete d3dResourceLeakChecker;
 
 	return 0;
 }

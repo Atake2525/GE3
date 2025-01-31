@@ -44,12 +44,12 @@ void Sprite::Update() {
 
 	vertexData[0].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
 	vertexData[0].texcoord = { 0.0f, 0.0f };
-	vertexData[1].position = {0.0f, 360.0f, 0.0f, 1.0f}; // 左下
-	vertexData[1].texcoord = {0.0f, 1.0f};
-	vertexData[2].position = { 640.0f, 0.0f, 0.0f, 1.0f }; // 右上
-	vertexData[2].texcoord = { 1.0f, 0.0f };
-	vertexData[3].position = { 640.0f, 360.0f, 0.0f, 1.0f }; // 右下
-	vertexData[3].texcoord = { 1.0f, 1.0f };
+	vertexData[1].position = { 640.0f, 0.0f, 0.0f, 1.0f }; // 右上
+	vertexData[1].texcoord = { 1.0f, 0.0f };
+	vertexData[2].position = { 640.0f, 360.0f, 0.0f, 1.0f }; // 右下
+	vertexData[2].texcoord = { 1.0f, 1.0f };
+	vertexData[3].position = {0.0f, 360.0f, 0.0f, 1.0f}; // 左下
+	vertexData[3].texcoord = {0.0f, 1.0f};
 	//vertexData[1].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
 	//vertexData[1].texcoord = {0.0f, 0.0f};
 	//vertexData[2].position = {640.0f, 360.0f, 0.0f, 1.0f}; // 右下
@@ -58,10 +58,10 @@ void Sprite::Update() {
 	//indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
 	indexData[0] = 0;
 	indexData[1] = 1;
-	indexData[2] = 2;
-	indexData[3] = 2;
+	indexData[2] = 3;
+	indexData[3] = 3;
 	indexData[4] = 1; 
-	indexData[5] = 3;
+	indexData[5] = 2;
 	
 	/*Transform uvTransform{
 	    {1.0f, 1.0f, 1.0f},
@@ -91,7 +91,7 @@ void Sprite::Update() {
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
-	Matrix4x4 projectionMatrix = MakePrespectiveFovMatrix(0.45f, float(WinApp::kClientWidth) / float(WinApp::kClientHeight), 0.1f, 100.0f);
+	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth), float(WinApp::kClientHeight), 0.1f, 100.0f);
 
 	transformationMatrixData->WVP = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 	//transformationMatrixData->WVP = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
