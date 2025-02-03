@@ -40,6 +40,14 @@ void Sprite::Initialize(SpriteBase* spriteBase) {
 	//transformationMatrixData->World = MakeIdentity4x4();
 }
 
+void Sprite::SetPRSC(const Vector2& pos, const float& rotate, const Vector2& size, const Vector4& color) {
+	position = pos;
+	rotation = rotate;
+	scale = size;
+	materialData->color = color;
+}
+
+
 void Sprite::Update() {
 
 	vertexData[0].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
@@ -50,12 +58,7 @@ void Sprite::Update() {
 	vertexData[2].texcoord = { 1.0f, 1.0f };
 	vertexData[3].position = {0.0f, 360.0f, 0.0f, 1.0f}; // 左下
 	vertexData[3].texcoord = {0.0f, 1.0f};
-	//vertexData[1].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
-	//vertexData[1].texcoord = {0.0f, 0.0f};
-	//vertexData[2].position = {640.0f, 360.0f, 0.0f, 1.0f}; // 右下
-	//vertexData[2].texcoord = {1.0f, 1.0f};
-
-	//indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
+	
 	indexData[0] = 0;
 	indexData[1] = 1;
 	indexData[2] = 3;
@@ -87,6 +90,9 @@ void Sprite::Update() {
         {0.0f, 0.0f, -5.0f}
     };
 
+	transform.translate = {position.x, position.y};
+	transform.rotate.z = rotation;
+	transform.scale = {scale.x, scale.y, 1.0f};
 
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
