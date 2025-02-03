@@ -20,6 +20,27 @@ public:
 	/// </summary>
 	void Draw(D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU);
 
+	// getter 平行移動、回転、拡縮、色
+	const Vector2& GetPosition() const { return position; }
+	const float& GetRotation() const { return rotation; }
+	const Vector2& GetScale() const { return scale; }
+	const Vector4& GetColor() const { return materialData->color; }
+
+	// Position、Rotate、Scale、Colorの更新を一つの関数で行う場合
+	void SetPRSC(const Vector2& pos, const float& rotate, const Vector2& size, const Vector4& color);
+
+	// setter 平行移動、回転、拡縮、色
+	void SetPosition(const Vector2& pos) { position = pos; }
+	void SetRotation(const float& rot) { rotation = rot; }
+	void SetScale(const Vector2& size) { scale = size; }
+	void SetColor(const Vector4& color) { materialData->color = color; }
+
+private: // Transform + color
+	Vector2 position = {0.0f, 0.0f};
+	float rotation = 0.0f;
+	Vector2 scale = {1.0f, 1.0f};
+	Vector4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+
 private:
 	HRESULT hr;
 	SpriteBase* spriteBase_ = nullptr;

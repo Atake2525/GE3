@@ -173,8 +173,7 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(Microsoft::WRL
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region 基盤システムの初期化
 	// D3D12ResourceChecker
-	D3DResourceLeakChecker* d3dResourceLeakChecker = nullptr;
-	d3dResourceLeakChecker = new D3DResourceLeakChecker();
+	D3DResourceLeakChecker d3dResourceLeakChecker;
 
 	// ポインタ
 	WinApp* winApp = nullptr;
@@ -207,8 +206,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	#endif
 #pragma region 最初のシーンの初期化
 
-	Sprite* sprite = new Sprite();
-	sprite->Initialize(spriteBase);
+	std::vector<Sprite*> sprites;
+	for (uint32_t i = 0; i < 5; i++) {
+		Sprite* sprite = new Sprite();
+		sprite->Initialize(spriteBase);
+		sprite->SetPosition(Vector2{10.0f * float(i) * 20, 10.0f});
+		sprites.push_back(sprite);
+	}
 
 #pragma endregion 最初のシーンの終了
 	// ポインタ
@@ -462,7 +466,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 単位行列を書き込んでおく
 	//*tranformationMatrixDataSprite = MakeIdentity4x4();
 	// CPUで動かすようのTransformを作る
-	Transform transformSprite{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f ,0.0f} };
+	Transform transformSprite{ {0.1f, 0.1f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f ,0.0f} };
 
 	
 
@@ -567,7 +571,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//indexResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite));
 	//indexDataSprite[0] = 0;  indexDataSprite[1] = 1;  indexDataSprite[2] = 2;
 	//indexDataSprite[3] = 1;  indexDataSprite[4] = 3;  indexDataSprite[5] = 2;
-		
+	Vector4 color = {1.0f, 1.0f, 1.0f, 1.0f};
 	//ゲームループ
 	//ウィンドウの×ボタンが押されるまでループ
 	while (true){
@@ -581,6 +585,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui_ImplDX12_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
+
+			Vector2 position = {transformSprite.translate.x, transformSprite.translate.y};
+			float rotation = transformSprite.rotate.z;
+			Vector2 scale = {transformSprite.scale.x, transformSprite.scale.y};
+
 
 			// Imguiの設定(Color&STR)
 			ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.0f, 0.7f, 1.0f));
@@ -668,7 +677,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				transform.rotate.x++;
 			}
 
-			sprite->Update();
+			for (Sprite* sprite : sprites) {
+				sprite->SetRotation(rotation);
+				sprite->SetScale(scale);
+				sprite->SetColor(color);
+				sprite->Update();
+			}
 
 			// 開発用UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える
 			//ImGui::ShowDemoWindow();
@@ -726,7 +740,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//directxBase->GetCommandList()->IASetIndexBuffer(&indexbufferViewSprite); // IBVを設定
 			// 描画！(DrawCall/ドローコール) 6個のインデックスを使用し一つのインスタンスを描画。その他は当面0で良い
-			sprite->Draw(textureSrvHandleGPU);
+			for (Sprite* sprite : sprites) {
+				sprite->Draw(textureSrvHandleGPU);
+			}
 			//// wvp用のCBufferの場所を設定
 			//directxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 			// ModelData描画
@@ -769,12 +785,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	delete winApp;
 	// スプライト解放
 	delete spriteBase;
-	delete sprite;
+	for (Sprite* sprite : sprites) {
+		delete sprite;
+	}
 	// 入力解放
 	delete input;
-	////リソースリークチェック
-	d3dResourceLeakChecker->~D3DResourceLeakChecker();
-	delete d3dResourceLeakChecker;
 
 	return 0;
 }
