@@ -443,8 +443,7 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(Microsoft::WRL
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// D3D12ResourceChecker
-	D3DResourceLeakChecker* d3dResourceLeakChecker = nullptr;
-	d3dResourceLeakChecker = new D3DResourceLeakChecker();
+	D3DResourceLeakChecker d3dResourceLeakChecker;
 
 	// ポインタ
 	WinApp* winApp = nullptr;
@@ -1284,17 +1283,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winApp->Finalize();
 	// WindowAPI解放
 	delete winApp;
-	////リソースリークチェック
-	d3dResourceLeakChecker->~D3DResourceLeakChecker();
-	//Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
-	//if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-	//	debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-	//	debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-	//	debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-	//	//debug->Release();
-	//}
-	//{
 
-	//}
 	return 0;
 }
