@@ -1275,14 +1275,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #ifdef DEBUG
 	debugController->Release();
 #endif // DEBUG
-	// 入力解放
-	delete input;
-	// directXBaseの終了処理
+	   // directXBaseの終了処理
 	directxBase->Finalize();
+	delete directxBase;
 	// WindowAPIの終了処理
 	winApp->Finalize();
 	// WindowAPI解放
 	delete winApp;
+	// 入力解放
+	delete input;
 
 	return 0;
 }
