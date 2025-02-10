@@ -2,10 +2,11 @@
 #include "SpriteBase.h"
 #include <cassert>
 #include "DirectXBase.h"
+#include "TextureManager.h"
 
 using namespace Microsoft::WRL;
 
-void Sprite::Initialize(SpriteBase* spriteBase) {
+void Sprite::Initialize(SpriteBase* spriteBase, std::string textureFilePath) {
 	spriteBase_ = spriteBase;
 	// VertexResourceの作成
 	CreateVertexResource();
@@ -36,8 +37,10 @@ void Sprite::Initialize(SpriteBase* spriteBase) {
 	
 	// 単位行列を書き込んでおく
 	transformationMatrixData->WVP = MakeIdentity4x4();
-	//transformationMatrixData->WVP = MakeIdentity4x4();
 	//transformationMatrixData->World = MakeIdentity4x4();
+
+	// 単位行列を書き込んでおく
+	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
 }
 
 void Sprite::SetPRSC(const Vector2& pos, const float& rotate, const Vector2& size, const Vector4& color) {
@@ -52,11 +55,11 @@ void Sprite::Update() {
 
 	vertexData[0].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
 	vertexData[0].texcoord = { 0.0f, 0.0f };
-	vertexData[1].position = { 640.0f, 0.0f, 0.0f, 1.0f }; // 右上
+	vertexData[1].position = { 1.0f, 0.0f, 0.0f, 1.0f }; // 右上
 	vertexData[1].texcoord = { 1.0f, 0.0f };
-	vertexData[2].position = { 640.0f, 360.0f, 0.0f, 1.0f }; // 右下
+	vertexData[2].position = { 1.0f, 1.0f, 0.0f, 1.0f }; // 右下
 	vertexData[2].texcoord = { 1.0f, 1.0f };
-	vertexData[3].position = {0.0f, 360.0f, 0.0f, 1.0f}; // 左下
+	vertexData[3].position = {0.0f, 1.0f, 0.0f, 1.0f}; // 左下
 	vertexData[3].texcoord = {0.0f, 1.0f};
 	
 	indexData[0] = 0;
@@ -66,7 +69,7 @@ void Sprite::Update() {
 	indexData[4] = 1; 
 	indexData[5] = 2;
 	
-	/*Transform uvTransform{
+	Transform uvTransform{
 	    {1.0f, 1.0f, 1.0f},
 	    {0.0f, 0.0f, 0.0f},
 	    {0.0f, 0.0f, 0.0f},
@@ -75,7 +78,7 @@ void Sprite::Update() {
 	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransform.scale);
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransform.rotate.z));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransform.translate));
-	materialData->uvTransform = uvTransformMatrix;*/
+	materialData->uvTransform = uvTransformMatrix;
 
 	// Transform変数を作る
 	Transform transform{
@@ -121,7 +124,7 @@ void Sprite::Draw(D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU) {
 
 	// SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 	//spriteBase_->GetDxBase()->GetCommandList()->SetGraphicsRootDescriptorTable(2, spriteBase_->GetDxBase()->GetSRVGPUDescriptorHandle(1));
-	spriteBase_->GetDxBase()->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
+	spriteBase_->GetDxBase()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
 
 	// 描画! (DrawCall)
 	spriteBase_->GetDxBase()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);

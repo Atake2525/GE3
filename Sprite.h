@@ -2,6 +2,7 @@
 #include "kMath.h"
 #include <d3d12.h>
 #include <wrl.h>
+#include <string>
 
 class SpriteBase;
 
@@ -10,7 +11,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(SpriteBase* spriteBase);
+	void Initialize(SpriteBase* spriteBase, std::string textureFilePath);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -40,6 +41,9 @@ private: // Transform + color
 	float rotation = 0.0f;
 	Vector2 scale = {1.0f, 1.0f};
 	Vector4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+
+	// テクスチャ番号
+	uint32_t textureIndex = 0;
 
 private:
 	HRESULT hr;
@@ -100,11 +104,4 @@ private:
 
 	D3D12_INDEX_BUFFER_VIEW indexbufferView{};
 
-	//// インデックスリソースにデータを書き込む
-	//indexDataSprite[0] = 0;
-	//indexDataSprite[1] = 1;
-	//indexDataSprite[2] = 2;
-	//indexDataSprite[3] = 1;
-	//indexDataSprite[4] = 3;
-	//indexDataSprite[5] = 2;
 };

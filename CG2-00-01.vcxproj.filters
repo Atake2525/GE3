@@ -87,6 +87,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Draw</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externels\imgui\imconfig.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

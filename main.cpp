@@ -23,6 +23,7 @@
 #include "externels/imgui/imgui_impl_win32.h"
 #include "SpriteBase.h"
 #include "Sprite.h"
+#include "TextureManager.h"
 //#include "externels/DirectXTex/DirectXTex.h"
 
 
@@ -191,6 +192,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	spriteBase = new SpriteBase;
 	spriteBase->Initialize(directxBase);
 
+	// テクスチャマネージャの初期化
+	TextureManager::GetInstance()->Initialize(directxBase);
+
+	TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+	TextureManager::GetInstance()->LoadTexture("Resources/monsterBall.png");
+
 #pragma endregion 基盤システムの初期化
 
 #ifdef _DEBUG
@@ -209,8 +216,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::vector<Sprite*> sprites;
 	for (uint32_t i = 0; i < 5; i++) {
 		Sprite* sprite = new Sprite();
-		sprite->Initialize(spriteBase);
-		sprite->SetPosition(Vector2{10.0f * float(i) * 20, 10.0f});
+		sprite->Initialize(spriteBase, "Resources/monsterBall.png");
+		sprite->SetPosition(Vector2{0.0f, 10.0f * float(i) * 20});
 		sprites.push_back(sprite);
 	}
 
@@ -466,7 +473,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 単位行列を書き込んでおく
 	//*tranformationMatrixDataSprite = MakeIdentity4x4();
 	// CPUで動かすようのTransformを作る
-	Transform transformSprite{ {0.1f, 0.1f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f ,0.0f} };
+	Transform transformSprite{ {120.0f, 120.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f ,0.0f} };
 
 	
 
@@ -648,6 +655,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (ImGui::TreeNode("SpriteSTR"))
 			{
+				ImGui::ColorEdit4("Color", &color.x);
 				ImGui::DragFloat3("Scale", &transformSprite.scale.x, 0.01f);
 				ImGui::DragFloat3("Rotate", &transformSprite.rotate.x, 0.01f);
 				ImGui::DragFloat3("Translate", &transformSprite.translate.x, 1.0f);
@@ -785,9 +793,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	delete winApp;
 	// スプライト解放
 	delete spriteBase;
+	// テクスチャマネージャの終了
+	TextureManager::GetInstance()->Finalize();
 	for (Sprite* sprite : sprites) {
 		delete sprite;
 	}
+
+
 	// 入力解放
 	delete input;
 

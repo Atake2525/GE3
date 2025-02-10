@@ -28,6 +28,9 @@ public:
 	// 終了処理
 	void Finalize();
 
+	// 最大SRV数(最大テクスチャ枚数)
+	static const uint32_t kMaxSRVCount;
+
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得する
 	/// </summary>
@@ -68,6 +71,8 @@ public:
 	// Textureデータを読む
 	DirectX::ScratchImage LoadTexture(const std::string& filePath);
 private:
+
+
 	// DirectX12デバイス
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 
