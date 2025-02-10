@@ -224,9 +224,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 			sprite->Initialize(spriteBase, "Resources/uvChecker.png");
 		}
-		sprite->SetPosition(Vector2{0.0f, 10.0f * float(i) * 20});
+		sprite->SetPosition(Vector2{100.0f + 100.0f * float(i),10.0f * float(i) * 20});
 		sprites.push_back(sprite);
 	}
+	Sprite* sprite_;
+	sprite_ = new Sprite();
+	sprite_->Initialize(spriteBase, "Resources/uvChecker.png");
+	sprite_->SetPosition(Vector2{640.0f, 360.0f});
+
 
 #pragma endregion 最初のシーンの終了
 	// ポインタ
@@ -480,7 +485,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 単位行列を書き込んでおく
 	//*tranformationMatrixDataSprite = MakeIdentity4x4();
 	// CPUで動かすようのTransformを作る
-	Transform transformSprite{ {120.0f, 120.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f ,0.0f} };
+	Transform transformSprite{ {1000.0f, 1000.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f ,0.0f} };
 
 	
 
@@ -586,6 +591,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//indexDataSprite[0] = 0;  indexDataSprite[1] = 1;  indexDataSprite[2] = 2;
 	//indexDataSprite[3] = 1;  indexDataSprite[4] = 3;  indexDataSprite[5] = 2;
 	Vector4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+	Vector2 anchorPoint = {0.5f, 0.5f};
+	bool isFlipX = false;
+	bool isFlipY = false;
+	Vector2 textureLeftTop = {0.0f, 0.0f};
+	Vector2 textureSize = sprite_->GetTextureSize();
 	//ゲームループ
 	//ウィンドウの×ボタンが押されるまでループ
 	while (true){
@@ -600,7 +610,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			Vector2 position = {transformSprite.translate.x, transformSprite.translate.y};
+			Vector2 position = sprite_->GetPosition();
 			float rotation = transformSprite.rotate.z;
 			Vector2 scale = {transformSprite.scale.x, transformSprite.scale.y};
 
@@ -665,10 +675,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::ColorEdit4("Color", &color.x);
 				ImGui::DragFloat3("Scale", &transformSprite.scale.x, 0.01f);
 				ImGui::DragFloat3("Rotate", &transformSprite.rotate.x, 0.01f);
-				ImGui::DragFloat3("Translate", &transformSprite.translate.x, 1.0f);
+				ImGui::DragFloat2("Translate", &position.x, 1.0f);
 				ImGui::DragFloat2("UVTranslate", &uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
 				ImGui::DragFloat2("UVScale", &uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
 				ImGui::SliderAngle("UVRotate", &uvTransformSprite.rotate.z);
+				ImGui::DragFloat2("anchorPoint", &anchorPoint.x, 0.1f);
+				ImGui::DragFloat2("TextureLeftTop", &textureLeftTop.x, 1.0f);
+				ImGui::DragFloat2("TextureSize", &textureSize.x, 1.0f);
+				ImGui::Checkbox("flipX", &isFlipX);
+				ImGui::Checkbox("flipY", &isFlipY);
 				ImGui::TreePop();
 			}
 
@@ -692,12 +707,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				transform.rotate.x++;
 			}
 
-			for (Sprite* sprite : sprites) {
-				sprite->SetRotation(rotation);
-				sprite->SetScale(scale);
-				sprite->SetColor(color);
-				sprite->Update();
-			}
+			//for (Sprite* sprite : sprites) {
+			//	//sprite->SetTextureLeftTop(textureLeftTop);
+			//	//sprite->SetTextureSize(textureSize);
+			//	sprite->SetFlipX(isFlipX);
+			//	sprite->SetFlipX(isFlipY);
+			//	sprite->SetAnchorPoint(anchorPoint);
+			//	sprite->SetRotation(rotation);
+			//	sprite->SetScale(scale);
+			//	sprite->SetColor(color);
+			//	sprite->Update();
+			//}
+			sprite_->SetTextureLeftTop(textureLeftTop);
+			sprite_->SetTextureSize(textureSize);
+			sprite_->SetFlipX(isFlipX);
+			sprite_->SetFlipX(isFlipY);
+			sprite_->SetAnchorPoint(anchorPoint);
+			sprite_->SetPosition(position);
+			sprite_->SetRotation(rotation);
+			sprite_->SetScale(scale);
+			sprite_->SetColor(color);
+			sprite_->Update();
 
 			// 開発用UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える
 			//ImGui::ShowDemoWindow();
@@ -755,9 +785,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//directxBase->GetCommandList()->IASetIndexBuffer(&indexbufferViewSprite); // IBVを設定
 			// 描画！(DrawCall/ドローコール) 6個のインデックスを使用し一つのインスタンスを描画。その他は当面0で良い
-			for (Sprite* sprite : sprites) {
-				sprite->Draw(/*textureSrvHandleGPU*/);
-			}
+			//for (Sprite* sprite : sprites) {
+			//	sprite->Draw(/*textureSrvHandleGPU*/);
+			//}
+			sprite_->Draw();
 			//// wvp用のCBufferの場所を設定
 			//directxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 			// ModelData描画

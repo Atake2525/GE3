@@ -21,26 +21,78 @@ public:
 	/// </summary>
 	void Draw(/*D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU*/);
 
-	// getter 平行移動、回転、拡縮、色
+	// getter
+
+	// 平行移動
 	const Vector2& GetPosition() const { return position; }
+	// 回転
 	const float& GetRotation() const { return rotation; }
+	// 拡縮
 	const Vector2& GetScale() const { return scale; }
+	// 色
 	const Vector4& GetColor() const { return materialData->color; }
+
+	// アンカーポイント
+	const Vector2& GetAnchorPoint() const { return anchorPoint; }
+
+	// 左右フリップ
+	const bool& GetIsFlipX() const { return isFlipX; }
+	
+	// 上下フリップ
+	const bool& GetIsFlipY() const { return isFlipY; }
+
+	// テクスチャ左上座標
+	const Vector2& GetTextureLeftTop() const { return textureLeftTop; }
+	// テクスチャ切り出しサイズ
+	const Vector2& GetTextureSize() const { return textureSize; }
+	 
+	// setter
+	
+	// 平行移動
+	void SetPosition(const Vector2& pos) { position = pos; }
+	// 回転
+	void SetRotation(const float& rot) { rotation = rot; }
+	// 拡縮
+	void SetScale(const Vector2& size) { scale = size; }
+	// 色
+	void SetColor(const Vector4& color) { materialData->color = color; }
 
 	// Position、Rotate、Scale、Colorの更新を一つの関数で行う場合
 	void SetPRSC(const Vector2& pos, const float& rotate, const Vector2& size, const Vector4& color);
 
-	// setter 平行移動、回転、拡縮、色
-	void SetPosition(const Vector2& pos) { position = pos; }
-	void SetRotation(const float& rot) { rotation = rot; }
-	void SetScale(const Vector2& size) { scale = size; }
-	void SetColor(const Vector4& color) { materialData->color = color; }
+	// setter アンカーポイント
+	void SetAnchorPoint(const Vector2& ancPoint) { anchorPoint = ancPoint; }
+
+	// 左右フリップ
+	void SetFlipX(bool FlipX) { isFlipX = FlipX; }
+
+	// 上下フリップ
+	void SetFlipY(bool FlipY) { isFlipY = FlipY; }
+
+	// テクスチャ左上座標
+	void SetTextureLeftTop(Vector2 LeftTop) { textureLeftTop = LeftTop; }
+
+	// テクスチャ切り出しサイズ
+	void SetTextureSize(Vector2 Size) { textureSize = Size; }
 
 private: // Transform + color
 	Vector2 position = {0.0f, 0.0f};
 	float rotation = 0.0f;
 	Vector2 scale = {1.0f, 1.0f};
 	Vector4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+
+	// アンカーポイント
+	Vector2 anchorPoint = {0.0f, 0.0f};
+
+	// 左右フリップ
+	bool isFlipX = false;
+	// 上下フリップ
+	bool isFlipY = false;
+
+	// テクスチャ左上座標
+	Vector2 textureLeftTop = {0.0f, 0.0f};
+	// テクスチャ切り出しサイズ
+	Vector2 textureSize = {100.0f, 100.0f};
 
 	// テクスチャ番号
 	uint32_t textureIndex = 0;
@@ -85,6 +137,9 @@ private:
 	void CreateTransformationMatrix();
 	// TransformationMatrixResourceにデータを書き込む溜めのアドレスを取得してTransformationMatrixDataに割り当てる
 	void CreateMapTransformationMatrixData();
+
+	// テクスチャサイズをイメージに合わせる
+	void AdjustTextureSize();
 	
 	// Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
 	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource;
