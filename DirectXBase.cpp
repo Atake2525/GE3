@@ -259,7 +259,6 @@ void DirectXBase::PostDraw() {
 	// コマンドリストのリセット
 	hr = commandList->Reset(commandAllocator.Get(), nullptr);
 	assert(SUCCEEDED(hr));
-
 }
 
 void DirectXBase::InitializeCommands() {
@@ -270,7 +269,7 @@ void DirectXBase::InitializeCommands() {
 	assert(SUCCEEDED(hr));
 
 	// コマンドキューをメンバ変数に記録
-	//this->commandQueue = commandQueue;
+	// this->commandQueue = commandQueue;
 
 	// コマンドアロケータを作成する
 	// ComPtr<ID3D12CommandAllocator> commandAllocator = nullptr;
@@ -353,13 +352,13 @@ void DirectXBase::CreateDXCCompiler() {
 	/*this->dxcUtils = dxcUtils;*/
 	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler));
 	assert(SUCCEEDED(hr));
-	//this->dxcCompiler = dxcCompiler;
+	// this->dxcCompiler = dxcCompiler;
 
 	// 現時点でincludeはしないが、includeに対応するために設定を行っておく
 	/*Microsoft::WRL::ComPtr<IDxcIncludeHandler> includeHandler = nullptr;*/
 	hr = dxcUtils->CreateDefaultIncludeHandler(&includeHandler);
 	assert(SUCCEEDED(hr));
-	//this->includeHandler = includeHandler;
+	// this->includeHandler = includeHandler;
 }
 
 void DirectXBase::CreateSwapChain() {
@@ -394,28 +393,28 @@ void DirectXBase::CreateDepthBuffer() {
 	device->CreateDepthStencilView(depthStencilResouce.Get(), &dsvDesc, dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
 	// DepthStencilStateの設定
-	//D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	// D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 	// Depthの機能を有効化する
 	depthStencilDesc.DepthEnable = true;
 	// 書き込みします
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	// 比較関数はLessEqual。つまり、近ければ描画される
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-	//this->depthStencilDesc = depthStencilDesc;
+	// this->depthStencilDesc = depthStencilDesc;
 }
 
 void DirectXBase::MakeDescriptorHeap() {
 	// RTV様のヒープでディスクリプタの数は2。RTVはShader内で触るものではないので、ShaderVisibleはfalse
-	rtvDescriptorHeap = CreateDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+	rtvDescriptorHeap = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 
 	// SRV様のヒープでディスクリプタの数は128。SRVはShader内で触るものなので、shaderVisibleはtrue
-	srvDescriptorHeap = CreateDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+	srvDescriptorHeap = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
 	// DSV用のヒープでディスクリプタの数は1。DSVはShader内で触るものではないので、ShaderVisibleはFalse
-	dsvDescriptorHeap = CreateDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+	dsvDescriptorHeap = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 }
 
-ComPtr<ID3D12DescriptorHeap> DirectXBase::CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
+ComPtr<ID3D12DescriptorHeap> DirectXBase::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
 	// ディスクリプターヒープの作成
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
 	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};
@@ -447,14 +446,14 @@ ComPtr<ID3D12DescriptorHeap> DirectXBase::CreateDescriptorHeap(Microsoft::WRL::C
 
 void DirectXBase::InitializeRenderTargetView() {
 	// SwapChainからResourceを引っ張ってくる
-	//Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources[2] = {nullptr};
+	// Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources[2] = {nullptr};
 	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&swapChainResources[0]));
 	// うまく取得できなければ起動できない
 	assert(SUCCEEDED(hr));
-	//this->swapChainResources[0] = swapChainResources[0];
+	// this->swapChainResources[0] = swapChainResources[0];
 	hr = swapChain->GetBuffer(1, IID_PPV_ARGS(&swapChainResources[1]));
 	assert(SUCCEEDED(hr));
-	//this->swapChainResources[1] = swapChainResources[1];
+	// this->swapChainResources[1] = swapChainResources[1];
 
 	// RTVの設定https://classroom.google.com/w/NzE4MzU1NzMyNDk5/tc/NzIwNzAyNTcxMjQ5
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;      // 出力結果をSRGBに変換して書き込む
@@ -464,22 +463,22 @@ void DirectXBase::InitializeRenderTargetView() {
 	// RTVを2つ作るのでディスクリプタを2つ用意
 	// D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
 	// まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
-	//rtvHandles[0] = rtvStartHandle;
-	//device->CreateRenderTargetView(swapChainResources[0].Get(), &rtvDesc, rtvHandles[0]);
+	// rtvHandles[0] = rtvStartHandle;
+	// device->CreateRenderTargetView(swapChainResources[0].Get(), &rtvDesc, rtvHandles[0]);
 
 	//// 2つ目のディスクリプタハンドルを得る
-	//rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	// rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	//// 2つ目を作る
-	//device->CreateRenderTargetView(swapChainResources[1].Get(), &rtvDesc, rtvHandles[1]);
+	// device->CreateRenderTargetView(swapChainResources[1].Get(), &rtvDesc, rtvHandles[1]);
 	/*this->rtvHandles[0] = rtvHandles[0];
 	this->rtvHandles[1] = rtvHandles[1];*/
 	//// 2つ目のディスクリプタハンドルを得る
-	//rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	//  2つ目を作る
-	 //device->CreateRenderTargetView(swapChainResources[1].Get(), &rtvDesc, rtvHandles[1]);
-	 for (uint32_t i = 0; i < 2; ++i) {
+	// rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//   2つ目を作る
+	// device->CreateRenderTargetView(swapChainResources[1].Get(), &rtvDesc, rtvHandles[1]);
+	for (uint32_t i = 0; i < 2; ++i) {
 		// 2つ目のディスクリプタハンドルを得る
-		 rtvHandles[i] = GetCPUDescriptorHandle(rtvDescriptorHeap, device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), i);
+		rtvHandles[i] = GetCPUDescriptorHandle(rtvDescriptorHeap, device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV), i);
 		device->CreateRenderTargetView(swapChainResources[i].Get(), &rtvDesc, rtvHandles[i]);
 	}
 }
@@ -548,7 +547,7 @@ Microsoft::WRL::ComPtr<IDxcBlob> DirectXBase::CompileShader(
 	return shaderBlob;
 }
 
-ComPtr<ID3D12Resource> DirectXBase::CreateBufferResource(ComPtr<ID3D12Device> device, size_t sizeInBytes) {
+ComPtr<ID3D12Resource> DirectXBase::CreateBufferResource(size_t sizeInBytes) {
 	// 頂点リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD; // UploadHeapを使う
@@ -577,7 +576,7 @@ ComPtr<ID3D12Resource> DirectXBase::CreateBufferResource(ComPtr<ID3D12Device> de
 }
 
 // DirectX12のTextureResourceを作る
-ComPtr<ID3D12Resource> DirectXBase::CreateTextureResource(ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata) {
+ComPtr<ID3D12Resource> DirectXBase::CreateTextureResource(const DirectX::TexMetadata& metadata) {
 	// metadataを基にResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Width = UINT(metadata.width);                             // Textureの幅
@@ -681,6 +680,7 @@ void DirectXBase::Finalize() {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 }
+void DirectXBase::Finalize() { CloseHandle(fenceEvent); }
 
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
@@ -694,6 +694,10 @@ D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetGPUDescriptorHandle(const Microsoft:
 	return handleGPU;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVCPUDescriptorHandle(uint32_t index) { return GetCPUDescriptorHandle(srvDescriptorHeap, 2, index); }
+D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVCPUDescriptorHandle(uint32_t index) {
+	return GetCPUDescriptorHandle(srvDescriptorHeap, device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), index);
+}
 
-D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVGPUDescriptorHandle(uint32_t index) { return GetGPUDescriptorHandle(srvDescriptorHeap, 2, index); }
+D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVGPUDescriptorHandle(uint32_t index) {
+	return GetGPUDescriptorHandle(srvDescriptorHeap, device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV), index);
+}

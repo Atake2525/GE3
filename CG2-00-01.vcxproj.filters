@@ -31,6 +31,9 @@
     <Filter Include="Log">
       <UniqueIdentifier>{b4ec2a73-0ecd-44a3-aaaf-8fef92cc78c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{a7e22cfd-5b84-4059-8572-c868b18b6621}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -77,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="D3DResourceLeakChecker.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBase.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Draw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +148,12 @@
     </ClInclude>
     <ClInclude Include="D3DResourceLeakChecker.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteBase.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Draw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
