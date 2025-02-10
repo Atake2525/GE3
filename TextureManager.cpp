@@ -119,10 +119,18 @@ uint32_t TextureManager::GetTextureIndexByFilePath(const std::string& filePath) 
 D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(uint32_t textureIndex) {
 	// 範囲外指定違反チェック
 	// テクスチャ枚数上限チェック
-	assert(textureDatas.size() + kSRVIndexTop < DirectXBase::kMaxSRVCount);
+	assert(textureIndex < DirectXBase::kMaxSRVCount);
 
 	// 追加したテクスチャデータの参照を取得する
 	TextureData& textureData = textureDatas.at(textureIndex);
 	//TextureData& textureData = textureDatas.back();
 	return textureData.srvHandleGPU;
+}
+
+const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
+	// 範囲指定外違反チェック
+	assert(textureIndex < DirectXBase::kMaxSRVCount);
+
+	TextureData& textureData = textureDatas.at(textureIndex);
+	return textureData.metadata;
 }

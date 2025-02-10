@@ -44,6 +44,6 @@ private:
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 
 	void CreateGraphicsPileLineState();
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPilelineState;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState;
 	/*descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;*/
 };
