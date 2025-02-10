@@ -107,7 +107,7 @@ void Sprite::Update() {
 	//transformationMatrixData->World = worldMatrix;
 }
 
-void Sprite::Draw(D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU) { 
+void Sprite::Draw(/*D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU*/) { 
 	// VertexBufferViewを設定
 	CreateVertexbufferView();
 	spriteBase_->GetDxBase()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView); // VBVを設定

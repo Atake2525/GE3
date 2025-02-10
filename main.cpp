@@ -194,9 +194,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// テクスチャマネージャの初期化
 	TextureManager::GetInstance()->Initialize(directxBase);
-
-	TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+	
 	TextureManager::GetInstance()->LoadTexture("Resources/monsterBall.png");
+	
+	TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
 #pragma endregion 基盤システムの初期化
 
@@ -214,9 +215,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region 最初のシーンの初期化
 
 	std::vector<Sprite*> sprites;
-	for (uint32_t i = 0; i < 5; i++) {
+	for (uint32_t i = 0; i < 4; i++) {
 		Sprite* sprite = new Sprite();
-		sprite->Initialize(spriteBase, "Resources/monsterBall.png");
+		if (i % 2 == 0) {
+			//TextureManager::GetInstance()->LoadTexture("Resources/monsterBall.png");
+			sprite->Initialize(spriteBase, "Resources/monsterBall.png");
+		} else {
+			//TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+			sprite->Initialize(spriteBase, "Resources/uvChecker.png");
+		}
 		sprite->SetPosition(Vector2{0.0f, 10.0f * float(i) * 20});
 		sprites.push_back(sprite);
 	}
@@ -749,7 +756,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//directxBase->GetCommandList()->IASetIndexBuffer(&indexbufferViewSprite); // IBVを設定
 			// 描画！(DrawCall/ドローコール) 6個のインデックスを使用し一つのインスタンスを描画。その他は当面0で良い
 			for (Sprite* sprite : sprites) {
-				sprite->Draw(textureSrvHandleGPU);
+				sprite->Draw(/*textureSrvHandleGPU*/);
 			}
 			//// wvp用のCBufferの場所を設定
 			//directxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
@@ -776,10 +783,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 	}
 	// ImGuiの終了処理。詳細はさして重要ではないので解説は省略する。
-	ImGui_ImplDX12_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
-	
+	//ImGui_ImplDX12_Shutdown();
+	//ImGui_ImplWin32_Shutdown();
+	//ImGui::DestroyContext();
+	//
 	
 #ifdef DEBUG
 	debugController->Release();

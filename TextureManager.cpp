@@ -48,15 +48,18 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	assert(textureDatas.size() + kSRVIndexTop < DirectXBase::kMaxSRVCount);
 
 
-	// テクスチャファイルを読んでプログラムで扱えるようにする
-	DirectX::ScratchImage image{};
-	std::wstring filePathW = ConvertString(filePath);
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
+	//// テクスチャファイルを読んでプログラムで扱えるようにする
+	//DirectX::ScratchImage image{};
+	//std::wstring filePathW = ConvertString(filePath);
+	//HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
+	//assert(SUCCEEDED(hr));
 
-	// ミニマップの作成
+	//// ミニマップの作成
+	//DirectX::ScratchImage mipImages{};
+	//hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
+
 	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
+	mipImages = directxBase_->LoadTexture(filePath);
 
 	// ミニマップ付きデータをメンバ変数に格納
 	// テクスチャデータを追加
@@ -69,6 +72,9 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.metadata = mipImages.GetMetadata();
 	textureData.resource = directxBase_->CreateTextureResource(textureData.metadata);
 
+	directxBase_->UploadTextureData(textureData.resource, mipImages);
+
+	
 	// テクスチャデータの要素番号をSRVのインデックスとする
 	uint32_t srvIndex = static_cast<uint32_t>(textureDatas.size() - 1) + kSRVIndexTop;
 
@@ -116,6 +122,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(uint32_t textureInde
 	assert(textureDatas.size() + kSRVIndexTop < DirectXBase::kMaxSRVCount);
 
 	// 追加したテクスチャデータの参照を取得する
-	TextureData& textureData = textureDatas.back();
+	TextureData& textureData = textureDatas.at(textureIndex);
+	//TextureData& textureData = textureDatas.back();
 	return textureData.srvHandleGPU;
 }

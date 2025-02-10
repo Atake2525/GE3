@@ -19,7 +19,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU);
+	void Draw(/*D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU*/);
 
 	// getter 平行移動、回転、拡縮、色
 	const Vector2& GetPosition() const { return position; }
