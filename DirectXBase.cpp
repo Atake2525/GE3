@@ -676,7 +676,13 @@ void DirectXBase::UpdateFixFPS() {
 }
 
 // 終了処理
-void DirectXBase::Finalize() { CloseHandle(fenceEvent); }
+void DirectXBase::Finalize() { 
+	CloseHandle(fenceEvent);
+	// ImGuiの終了処理。詳細はさして重要ではないので解説は省略する。
+	 ImGui_ImplDX12_Shutdown();
+	 ImGui_ImplWin32_Shutdown();
+	 ImGui::DestroyContext();
+}
 
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();

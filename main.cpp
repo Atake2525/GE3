@@ -195,9 +195,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// テクスチャマネージャの初期化
 	TextureManager::GetInstance()->Initialize(directxBase);
 	
+	TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 	TextureManager::GetInstance()->LoadTexture("Resources/monsterBall.png");
 	
-	TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
 #pragma endregion 基盤システムの初期化
 
@@ -525,31 +525,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	vertexData[5].position = { 0.5f, -0.5f, -0.5f, 1.0f };
 	vertexData[5].texcoord = { 1.0f, 1.0f };*/
 
-	// Textureを読んで転送する
-	DirectX::ScratchImage mipImages = directxBase->LoadTexture("Resources/uvChecker.png");
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = directxBase->CreateTextureResource(metadata);
-	directxBase->UploadTextureData(textureResource, mipImages);
+	//// Textureを読んで転送する
+	//DirectX::ScratchImage mipImages = directxBase->LoadTexture("Resources/uvChecker.png");
+	//const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+	//Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = directxBase->CreateTextureResource(metadata);
+	//directxBase->UploadTextureData(textureResource, mipImages);
 
 
-	
+	//
 
-	// ShaderResourceVieを作る
-	// metaDataを基にSRVの設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = metadata.format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
-	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+	//// ShaderResourceVieを作る
+	//// metaDataを基にSRVの設定
+	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	//srvDesc.Format = metadata.format;
+	//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
+	//srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
-	// SRVを作成するDescriptorHeapの場所を決める
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = directxBase->GetSRVCPUDescriptorHandle(1);
-	//D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = srvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = directxBase->GetSRVGPUDescriptorHandle(1);
-	//D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
-	// 先頭はImGuiが使っているのでその次を使う
-	// SRVの作成
-	directxBase->GetDevice()->CreateShaderResourceView(textureResource.Get(), &srvDesc, textureSrvHandleCPU);
+	//// SRVを作成するDescriptorHeapの場所を決める
+	//D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = directxBase->GetSRVCPUDescriptorHandle(1);
+	////D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = srvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	//D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = directxBase->GetSRVGPUDescriptorHandle(1);
+	////D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	//// 先頭はImGuiが使っているのでその次を使う
+	//// SRVの作成
+	//directxBase->GetDevice()->CreateShaderResourceView(textureResource.Get(), &srvDesc, textureSrvHandleCPU);
 
 
 	///TransformationMatrix用のResourceを作る
@@ -786,7 +786,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ImGui_ImplDX12_Shutdown();
 	//ImGui_ImplWin32_Shutdown();
 	//ImGui::DestroyContext();
-	//
 	
 #ifdef DEBUG
 	debugController->Release();
