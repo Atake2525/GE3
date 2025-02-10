@@ -1266,10 +1266,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			directxBase->PostDraw();
 		}
 	}
-	// ImGuiの終了処理。詳細はさして重要ではないので解説は省略する。
-	ImGui_ImplDX12_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
 	
 	
 #ifdef DEBUG
