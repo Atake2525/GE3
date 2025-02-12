@@ -14,6 +14,9 @@
 
 class DirectXBase {
 public:
+
+	static DirectXBase* GetInstance();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>

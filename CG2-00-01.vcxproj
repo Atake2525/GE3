@@ -99,14 +99,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externels\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externels\imgui\imgui_tables.cpp" />
     <ClCompile Include="externels\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="kMath.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteBase.cpp" />
+    <ClCompile Include="StageScene.cpp" />
     <ClCompile Include="StringUtility.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -120,14 +124,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externels\imgui\imstb_rectpack.h" />
     <ClInclude Include="externels\imgui\imstb_textedit.h" />
     <ClInclude Include="externels\imgui\imstb_truetype.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IScene.h" />
     <ClInclude Include="kMath.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteBase.h" />
+    <ClInclude Include="StageScene.h" />
     <ClInclude Include="StringUtility.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />

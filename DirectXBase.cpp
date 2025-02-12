@@ -19,6 +19,11 @@ using namespace StringUtility;
 // 最大テクスチャ枚数
 const uint32_t DirectXBase::kMaxSRVCount = 512;
 
+DirectXBase* DirectXBase::GetInstance() {
+	static DirectXBase instance;
+	return &instance;
+}
+
 ComPtr<ID3D12Resource> DirectXBase::CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height) {
 	// 生成するResouceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
