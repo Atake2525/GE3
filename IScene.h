@@ -2,6 +2,9 @@
 
 enum SCENE {TITLE, STAGE};
 
+class WinApp;
+class DirectXBase;
+
 class IScene {
 protected:
 	// シーン番号を管理する変数
@@ -10,7 +13,7 @@ protected:
 public:
 	// 継承先で実装される関数
 	// 中小クラスなので純粋仮想関数とする
-	virtual void Initialize() = 0;
+	virtual void Initialize(WinApp* winApp, DirectXBase* directxBase) = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	

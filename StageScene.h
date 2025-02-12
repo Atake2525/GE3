@@ -1,15 +1,12 @@
 #pragma once
 #include "IScene.h"
 
-class WinApp;
-class DirectXBase;
 
 // ステージシーン
 class StageScene : public IScene {
 public:
-	StageScene(WinApp* winApp, DirectXBase* directxBase);
 	
-	void Initialize() override;
+	void Initialize(WinApp* winApp, DirectXBase* directxBase) override;
 	void Update() override;
 	void Draw() override;
 

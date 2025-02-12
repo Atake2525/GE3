@@ -14,12 +14,14 @@ GameManager::GameManager() {
 
 
 	// 各シーンの配列
-	sceneArr_[TITLE] = std::make_unique<TitleScene>(winApp, directxBase);
-	sceneArr_[STAGE] = std::make_unique<StageScene>(winApp, directxBase);
+	sceneArr_[TITLE] = std::make_unique<TitleScene>();
+	sceneArr_[STAGE] = std::make_unique<StageScene>();
 
 	// 初期化シーンの設定
 	currentSceneNo_ = TITLE;
 	prevSceneNo_ = 1;
+
+	sceneArr_[currentSceneNo_]->Initialize(winApp, directxBase);
 }
 
 // デストラクタによるdelete処理
@@ -56,7 +58,7 @@ int GameManager::Run() {
 
 			// シーン変更チェック
 			if (prevSceneNo_ != currentSceneNo_) {
-				sceneArr_[currentSceneNo_]->Initialize();
+				sceneArr_[currentSceneNo_]->Initialize(winApp, directxBase);
 			}
 
 			// 更新処理
