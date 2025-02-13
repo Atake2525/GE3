@@ -74,6 +74,9 @@ public:
 
 	// テクスチャ切り出しサイズ
 	void SetTextureSize(Vector2 Size) { textureSize = Size; }
+	
+	// テクスチャ変更
+	void ChangeTexture(std::string textureFilePath);
 
 private: // Transform + color
 	Vector2 position = {0.0f, 0.0f};

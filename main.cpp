@@ -703,8 +703,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::PopStyleColor();
 
 			if (input->TriggerKey(DIK_0)) {
-				OutputDebugStringA("Hit 0\n");
-				transform.rotate.x++;
+				sprite_->ChangeTexture("Resources/monsterBall.png");
+				textureSize = sprite_->GetTextureSize();
 			}
 
 			//for (Sprite* sprite : sprites) {

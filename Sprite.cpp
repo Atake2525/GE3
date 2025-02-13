@@ -127,7 +127,7 @@ void Sprite::Update() {
 
 	transform.translate = {position.x, position.y};
 	transform.rotate.z = rotation;
-	transform.scale = {textureSize.x, textureSize.y, 1.0f};
+	transform.scale = {scale.x / textureSize.x * textureSize.x, scale.y / textureSize.y * textureSize.y, 1.0f};
 
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
@@ -137,6 +137,51 @@ void Sprite::Update() {
 	transformationMatrixData->WVP = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 	//transformationMatrixData->WVP = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 	//transformationMatrixData->World = worldMatrix;
+}
+
+void Sprite::ChangeTexture(std::string textureFilePath) {
+	// 単位行列を書き込んでおく
+	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
+
+	AdjustTextureSize();
+
+	float left = 0.0f - anchorPoint.x;
+	float right = 1.0f - anchorPoint.x;
+	float top = 0.0f - anchorPoint.y;
+	float bottom = 1.0f - anchorPoint.y;
+
+	// 左右反転
+	if (isFlipX) {
+		left = -left;
+		right = -right;
+	}
+	// 上下反転
+	if (isFlipY) {
+		top = -top;
+		bottom = -bottom;
+	}
+
+	const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex);
+	float tex_left = textureLeftTop.x / metadata.width;
+	float tex_right = (textureLeftTop.x + textureSize.x) / metadata.width;
+	float tex_top = textureLeftTop.y / metadata.height;
+	float tex_bottom = (textureLeftTop.y + textureSize.y) / metadata.height;
+
+	vertexData[0].position = {left, top, 0.0f, 1.0f}; // 左上
+	vertexData[0].texcoord = {tex_left, tex_top};
+	vertexData[1].position = {right, top, 0.0f, 1.0f}; // 右上
+	vertexData[1].texcoord = {tex_right, tex_top};
+	vertexData[2].position = {right, bottom, 0.0f, 1.0f}; // 右下
+	vertexData[2].texcoord = {tex_right, tex_bottom};
+	vertexData[3].position = {left, bottom, 0.0f, 1.0f}; // 左下
+	vertexData[3].texcoord = {tex_left, tex_bottom};
+
+	indexData[0] = 0;
+	indexData[1] = 1;
+	indexData[2] = 3;
+	indexData[3] = 3;
+	indexData[4] = 1;
+	indexData[5] = 2;
 }
 
 void Sprite::Draw(/*D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU*/) { 
